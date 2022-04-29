@@ -9,21 +9,22 @@ public class UsersPage {
     private int pageSize;
     private int totalCount;
 
-    private List<Object> users; //TODO: add userEntity class
+    private List<UserEntity> users; //TODO: add userEntity class
 
-    public List<Object> getUsers() {
+    public List<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(List<Object> users) {
+    public void setUsers(List<UserEntity> users) {
         this.users = users;
     }
 
-    public UsersPage(int pageNumber, int pagesCount, int pageSize, int totalCount, Collection<Object> users) {
+    public UsersPage(int pageNumber, int pagesCount, int pageSize, int totalCount, List<UserEntity> users) {
         this.pageNumber = pageNumber;
         this.pagesCount = pagesCount;
         this.pageSize = pageSize;
         this.totalCount = totalCount;
+        this.users = users;
     }
 
     public void setPageNumber(int pageNumber) {
