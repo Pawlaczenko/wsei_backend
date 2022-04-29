@@ -9,7 +9,7 @@ public class UsersPage {
     private int pageSize;
     private int totalCount;
 
-    private List<UserEntity> users; //TODO: add userEntity class
+    private List<UserEntity> users;
 
     public List<UserEntity> getUsers() {
         return users;

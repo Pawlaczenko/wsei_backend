@@ -22,6 +22,11 @@ public class UserController {
         return this.usersService.getUsers(pageNumber,pageSize);
     }
 
+    @RequestMapping("/api/users/add")
+    public String addUser() {
+        return "addUser";
+    }
+
     @RequestMapping(
             value = "/api/user/create",
             method = RequestMethod.POST,
@@ -30,7 +35,7 @@ public class UserController {
     )
     @ResponseBody
     public UserEntity createUser(@RequestBody UserEntity user) {
-        //TODO: odwołanie do serwisu
+        this.usersService.createUser(user);
         return user;
     }
 }

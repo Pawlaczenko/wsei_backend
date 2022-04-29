@@ -26,9 +26,13 @@ public class UsersService {
         pageSize = Math.max(1,pageSize);
         pageSize = Math.min(100,pageSize);
 
-        int pagesCount = 0; //TODO: wyliczyc
-        int totalCount = 0; //TODO: pibrac
+        int totalCount = this.users.size();
+        int pagesCount = (int)Math.ceil((double)totalCount/(double)pageSize);
 
         return new UsersPage(pageNumber,pagesCount,pageSize,totalCount, this.users);
+    }
+
+    public void createUser(UserEntity user){
+        this.users.add(user);
     }
 }

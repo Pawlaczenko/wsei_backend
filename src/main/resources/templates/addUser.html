@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form id="userForm">
+        Name: <input id="userName" required name="name" type="text" /> <br/>
+        Email: <input id="userEmail" required ="email" type="email" /> <br/>
+        <br />
+        <input type="submit" value="dodaj" />
+    </form>
+<script>
+   const requestUrl = '/api/user/create';
+   const requestData = {
+        id: 0,
+        name: 'john',
+        email: 'mail@m.pl'
+    };
+
+    const sendData = async (requestUrl, requestData) => {
+        const response = await fetch(requestUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)  // called request payload or request content too
+        });
+        return await response.json();
+    }
+
+    document.getElementById("userForm").addEventListener("submit",e => {
+         e.preventDefault();
+         requestData.name = document.getElementById("userName").value;
+         requestData.email = document.getElementById("userEmail").value;
+
+         sendData(requestUrl,requestData);
+    } );
+
+</script>
+</body>
+</html>
