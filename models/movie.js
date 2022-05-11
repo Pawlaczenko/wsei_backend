@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const posterImageBasePath = 'uploads/moviePosters';
+
 const movieSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -20,7 +22,7 @@ const movieSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    poster:{
+    posterImageName:{
         type: String,
     },
     director: {
@@ -31,3 +33,4 @@ const movieSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Movie',movieSchema);
+module.exports.posterImageBasePath = posterImageBasePath;
