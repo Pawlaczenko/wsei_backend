@@ -1,0 +1,29 @@
+{
+  "name": "wsei_backend",
+  "version": "1.0.0",
+  "description": "- [ ] Przygotować bazę danych\r - [ ] Wyszukiwanie, filtrowanie, sortowanie filmów.\r - [ ] Paginacja\r - [ ] Strona filmu\r - [ ] REST API filmów\r - [ ] Rejestracja usera\r - [ ] Logowanie usera\r - [ ] Wylogowywanie\r - [ ] Profil użytkownika\r - [ ] Podstawowe UI\r - [ ] Walidacja danych\r - [ ] Handling errorów\r - [ ] Zarządzanie sesją\r - [ ] Panel Admina\r - [ ] Komentarze użytkowników\r - [ ] Dokumentacja",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pawlaczenko/wsei_backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pawlaczenko/wsei_backend/issues"
+  },
+  "homepage": "https://github.com/Pawlaczenko/wsei_backend#readme",
+  "dependencies": {
+    "ejs": "^3.1.7",
+    "express": "^4.18.1",
+    "express-ejs-layouts": "^2.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
