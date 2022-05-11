@@ -1,0 +1,16 @@
+- [ ] Przygotować bazę danych
+- [ ] Wyszukiwanie, filtrowanie, sortowanie filmów.
+- [ ] Paginacja
+- [ ] Strona filmu
+- [ ] REST API filmów
+- [ ] Rejestracja usera
+- [ ] Logowanie usera
+- [ ] Wylogowywanie
+- [ ] Profil użytkownika
+- [ ] Podstawowe UI
+- [ ] Walidacja danych
+- [ ] Handling errorów
+- [ ] Zarządzanie sesją
+- [ ] Panel Admina
+- [ ] Komentarze użytkowników
+- [ ] Dokumentacja
