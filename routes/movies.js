@@ -18,7 +18,25 @@ const upload = multer({
 
 // Get All Movies
 router.get('/', async (req,res) => {
-    res.send('All movies');
+    let query = Movie.find();
+    if(req.query.title != null && req.query.title != ''){
+        query = query.regex('title', new RegExp(req.query.title, 'i'));
+    }
+    if(req.query.releasedBefore != null && req.query.releasedBefore != ''){
+        query = query.lte('releaseDate', req.query.releasedBefore);
+    }
+    if(req.query.releasedAfter != null && req.query.releasedAfter != ''){
+        query = query.gte('releaseDate', req.query.releasedAfter);
+    }
+    try {
+        const movies = await query.exec();
+        res.render('movies/index',{
+            movies: movies,
+            searchOptions: req.query
+        })
+    } catch (error) {
+        res.redirect('/');
+    }
 });
 
 // Get Movies form

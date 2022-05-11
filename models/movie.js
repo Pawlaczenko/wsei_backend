@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const path = require('path');
 
 const posterImageBasePath = 'uploads/moviePosters';
 
@@ -32,5 +33,11 @@ const movieSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Movie',movieSchema);
+movieSchema.virtual('posterImagePath').get(function(){
+    if(this.posterImageName != null){
+        return path.join('/', posterImageBasePath, this.posterImageName);
+    }
+});
+
+module.exports = mongoose.model('Movie', movieSchema);
 module.exports.posterImageBasePath = posterImageBasePath;
