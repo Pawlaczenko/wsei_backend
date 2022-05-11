@@ -11,8 +11,8 @@ router.get('/', async (req,res) => {
     try{
         const directors = await Director.find(searchOptions);
         res.render('directors/index', {
-            directors: directors,
-            searchOptions: req.query
+            searchOptions: req.query,
+            directors: directors
         });
     } catch {
         res.redirect('/'); //TODO: change
