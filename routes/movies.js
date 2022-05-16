@@ -1,20 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 
 const Movie = require('../models/movie');
 const Director = require('../models/director');
-
-const uploadPath = path.join('public', Movie.posterImageBasePath);
-const imageMimeTypes = ['images/jpeg', 'images/png', 'images/gif'];
-const upload = multer({
-    dest: uploadPath,
-    filterFilter: (req, file, callback) => {
-        callback(null, imageMimeTypes.includes(file.mimetype));
-    }
-});
 
 // Get All Movies
 router.get('/', async (req,res) => {
@@ -45,32 +33,24 @@ router.get('/new',async (req,res)=>{
 });
 
 // Create Movies
-router.post('/', upload.single('poster'), async (req,res)=>{
-    const fileName = req.file != null ? req.file.filename : null;
+router.post('/', async (req,res)=>{
     const movie = new Movie({
         title: req.body.title,
         director: req.body.director,
         releaseDate: new Date(req.body.releaseDate),
         duration: req.body.duration,
         description: req.body.description,
-        posterImageName: fileName
     });
+    savePoster(movie,req.body.poster);
 
     try {
         const newMovie = await movie.save();
         //res.redirect(`movies/${newMovie.id}`);
         res.redirect('movies');
     } catch {
-        if(movie.posterImageName != null) removeMoviePoster(movie.posterImageName);
         renderNewPage(res,movie,true);
     }
 });
-
-const removeMoviePoster = (filename) => {
-    fs.unlink(path.join(uploadPath, fileName), error => {
-        if(error) console.error(error);
-    });
-}
 
 const renderNewPage = async (res, movie, hasError = false ) => {
     try {
@@ -83,6 +63,17 @@ const renderNewPage = async (res, movie, hasError = false ) => {
         res.render('movies/new',params);
     } catch {
         res.redirect('/movies');
+    }
+}
+
+const savePoster = (movie, poster) => {
+    const imageTypes = ['image/jpeg','image/png','image/gif'];
+    if(poster==null) return;
+    const posterObject = JSON.parse(poster);
+    if(posterObject != null && imageTypes.includes(posterObject.type)){
+        //all good
+        movie.posterImage = new Buffer.from(posterObject.data,'base64');
+        movie.posterImageType = posterObject.type;
     }
 }
 

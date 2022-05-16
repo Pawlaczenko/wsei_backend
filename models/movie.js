@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const path = require('path');
-
-const posterImageBasePath = 'uploads/moviePosters';
 
 const movieSchema = new mongoose.Schema({
     title: {
@@ -23,7 +20,10 @@ const movieSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    posterImageName:{
+    posterImage:{
+        type: Buffer,
+    },
+    posterImageType: {
         type: String,
     },
     director: {
@@ -34,10 +34,9 @@ const movieSchema = new mongoose.Schema({
 });
 
 movieSchema.virtual('posterImagePath').get(function(){
-    if(this.posterImageName != null){
-        return path.join('/', posterImageBasePath, this.posterImageName);
+    if(this.posterImage != null && this.posterImageType != null){
+        return `data:${this.posterImageType};charset=utf-8;base64,${this.posterImage.toString('base64')}`;
     }
 });
 
 module.exports = mongoose.model('Movie', movieSchema);
-module.exports.posterImageBasePath = posterImageBasePath;
