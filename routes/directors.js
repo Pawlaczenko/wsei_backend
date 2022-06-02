@@ -2,6 +2,7 @@ const express = require('express');
 const { redirect } = require('express/lib/response');
 const router = express.Router();
 const Director = require('../models/director');
+const Movie = require('../models/movie');
 
 // Get All Directors
 router.get('/', async (req,res) => {
@@ -47,8 +48,17 @@ router.post('/', async (req,res)=>{
 });
 
 
-router.get('/:id',(req,res)=>{
-    res.send("Show Director "+req.params.id);
+router.get('/:id', async (req,res)=>{
+    try {
+        const director = await Director.findById(req.params.id);
+        const movies = await Movie.find({director: director.id}).limit(5).exec();
+        res.render('directors/show',{
+            director: director,
+            moviesByDirector: movies
+        })
+    } catch {
+        res.redirect('/');
+    }
 });
 
 router.get('/:id/edit', async (req,res)=>{
