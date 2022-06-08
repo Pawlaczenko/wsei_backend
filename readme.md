@@ -1,5 +1,5 @@
 - [ ] Przygotować bazę danych
-- [ ] Wyszukiwanie, filtrowanie, sortowanie filmów.
+- [x] Wyszukiwanie, filtrowanie, sortowanie filmów.
 - [ ] Paginacja
 - [ ] Strona filmu
 - [ ] REST API filmów
