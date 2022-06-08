@@ -18,8 +18,10 @@
 
 <div>
     <% movies.forEach(movie => { %>
-       <img height="150" width="100" src="<%=movie.posterImagePath%>" >
-       <p><%=movie.title%></p>
-       <p><%=movie.releaseDate%></p>
+        <a href="/movies/<%= movie.id %>">
+            <img height="150" width="100" src="<%=movie.posterImagePath%>" >
+            <p><%=movie.title%></p>
+            <p><%=movie.releaseDate%></p>
+        </a>
     <% }) %>
 </div>
