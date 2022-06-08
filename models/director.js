@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const Movie = require('./movie');
 
 const directorSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
         required: [true, 'Director name is required.'],
     },
-    surname: {
+    lastName: {
         type: String,
         required: [true, 'Director surname is required.'],
     }

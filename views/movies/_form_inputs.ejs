@@ -6,7 +6,7 @@
     <label>Director</label>
     <select name="director">
         <% directors.forEach(director => { %>
-            <option <%= director.id === movie.director ? 'selected' : '' %> label="<%= director.name + ' ' + director.surname%>" value="<%=director.id %>">
+            <option <%= director.id === movie.director ? 'selected' : '' %> label="<%= director.firstName + ' ' + director.lastName%>" value="<%=director.id %>">
         <% }) %>
     </select>
 </div>
