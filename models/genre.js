@@ -4,7 +4,7 @@ const Genre = require('./movie');
 const genreSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Genre name is required.'],
+        required: true,
     }
 });
 

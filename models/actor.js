@@ -4,11 +4,11 @@ const Movie = require('./movie');
 const actorSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: [true, 'actor name is required.'],
+        required: true,
     },
     lastName: {
         type: String,
-        required: [true, 'actor surname is required.'],
+        required: true,
     }
 });
 

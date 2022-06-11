@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const movieSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: [true, 'Movie name is required.'],
+        required: true,
     },
     description: {
         type: String,
@@ -13,7 +13,7 @@ const movieSchema = new mongoose.Schema({
     },
     releaseDate: {
         type: Date,
-        required: [true, 'Release date is required.'],
+        required: true,
     },
     createdAt: {
         type: Date,
@@ -28,7 +28,7 @@ const movieSchema = new mongoose.Schema({
     },
     director: {
         type: mongoose.Schema.Types.ObjectId,
-        required: [true, 'Director is required.'],
+        required: true,
         ref: 'Director'
     }
 });
