@@ -11,6 +11,8 @@ const methodOverride = require('method-override');
 const indexRouter = require('./routes/index');
 const directorRouter = require('./routes/directors');
 const movieRouter = require('./routes/movies');
+const actorRouter = require('./routes/actors');
+const genreRouter = require('./routes/genres');
 
 app.set('view engine','ejs');
 app.set('views',__dirname+'/views');
@@ -32,5 +34,7 @@ db.once('open',() => console.log("Connected to mongoose"));
 app.use('/',indexRouter);
 app.use('/directors',directorRouter);
 app.use('/movies',movieRouter);
+app.use('/actors',actorRouter);
+app.use('/genres',genreRouter);
 
 app.listen(process.env.PORT || 3000);
