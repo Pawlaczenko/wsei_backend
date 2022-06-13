@@ -137,7 +137,6 @@ savePoster = (movie, poster) => {
     if(poster==null) return;
     const posterObject = JSON.parse(poster);
     if(posterObject != null && imageTypes.includes(posterObject.type)){
-        //all good
         movie.posterImage = new Buffer.from(posterObject.data,'base64');
         movie.posterImageType = posterObject.type;
     }

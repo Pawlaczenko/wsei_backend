@@ -1,8 +1,6 @@
 const express = require('express');
-const { redirect } = require('express/lib/response');
 const router = express.Router();
 const Director = require('../models/director');
-const Movie = require('../models/movie');
 
 const {
     getAllDirectors,
@@ -31,7 +29,7 @@ router.get('/:id/edit', async (req,res)=>{
         const director = await Director.findById(req.params.id);
         res.render('directors/edit', {director: director });   
     } catch (error) {
-        res.redirect('/directors');
+        res.redirect('/directors'); //TODO: change the way errors are handled
     }
 });
 

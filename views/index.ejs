@@ -3,6 +3,6 @@
     <% movies.forEach(movie => { %>
        <img height="150" width="100" src="<%=movie.posterImagePath%>" >
        <p><%=movie.title%></p>
-       <p><%=movie.releaseDate%></p>
+       <p>Release date: <%=movie.releaseDate.toDateString()%></p>
     <% }) %>
 </div>

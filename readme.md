@@ -3,7 +3,6 @@
 - [ ] Paginacja
 - [x] Strona filmu
 - [ ] REST API
-- [ ] Rejestracja usera
 - [ ] Użytkownicy
 - [ ] Profil użytkownika
 - [ ] Podstawowe UI
@@ -12,3 +11,5 @@
 - [ ] Zarządzanie sesją
 - [ ] Dokumentacja
 - [x] Podstawowe routy
+- [ ] Eksport powtarzalnych elementów do partiali
+- [ ] Prywatne biblioteki usera
