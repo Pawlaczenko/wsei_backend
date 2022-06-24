@@ -12,16 +12,4 @@ const directorSchema = new mongoose.Schema({
     }
 });
 
-directorSchema.pre('remove', function(next){
-    Movie.find({director: this.id},(err,movies)=>{
-        if(err){
-            next(err);
-        } else if(movies.length >0){
-            next(new Error("This director belongs to a movie"));
-        } else {
-            next();
-        }
-    });
-});
-
 module.exports = mongoose.model('Director',directorSchema);

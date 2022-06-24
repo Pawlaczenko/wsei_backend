@@ -1,51 +1,59 @@
 const Actor = require('../models/actor');
 
-const {
-    getMoviesByActor
-} = require('../controllers/movieController');
-
 exports.getAllActors = async (req, res) => {
     try{
         const actors = await Actor.find();
-        res.render('actors/index', {
-            actors: actors
+        res.status(200).json({
+            status: 'success',
+            requestedAt: req.requestTime,
+            results: actors.length,
+            data: actors
         });
-    } catch {
-        res.redirect('/');
+    } catch(error) {
+        res.status(404).json({
+            status:'Error',
+            results: error
+        })
     }
 }
 
 exports.createActor = async (req, res) => {
-    const actor = new Actor({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
-    });
-
     try {
-        const newActor = await director.save();
-        res.redirect(`actors/${newActor.id}`)
-    } catch {
-        res.render('actors/new',{
-            actor: actor,
-            errorMessage: 'Error creating Actor'
+        const actor = new Actor({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
         });
+    
+        const newActor = await actor.save();
+        res.status(201).json({
+            status: 'success',
+            data: newActor
+        })
+    } catch (error) {
+        res.status(404).json({
+            status:'Error',
+            results: error.message
+        })
     }
 }
 
 exports.getOneActor = async (req,res)=>{
     try {
         const actor = await Actor.findById(req.params.id);
-        const movies = await getMoviesByActor(actor.id);
-        res.render('actors/show',{
-            actor: actor,
-            getMoviesByActor: movies
-        });
-    } catch {
-        res.redirect('/');
+        res.status(200).json({
+            status: 'success',
+            requestedAt: req.requestTime,
+            data: actor
+        }); 
+    } catch (error) {
+        res.status(404).json({
+            status:'Error',
+            results: error
+        })
     }
 }
 
-exports.editActor = async (req,res)=>{
+exports.editActor = async (req,res, next)=>{
     let actor;
     try {
         actor = await Actor.findById(req.params.id);
@@ -53,23 +61,35 @@ exports.editActor = async (req,res)=>{
         actor.lastName = req.body.lastName;
 
         await actor.save();
-        res.redirect(`/actors/${actor.id}`)
-    } catch(err) { 
-        res.redirect('/');
+        res.status(200).json({
+            status: 'success',
+            data: actor
+        })
+    } catch(error) { 
+        res.status(404).json({
+            status:'Error',
+            results: error
+        })
     }
 }
 
 exports.deleteActor = async (req,res)=>{
-    let actor;
     try {
-        actor = await Actor.findById(req.params.id);
-        await actor.remove();
-        res.redirect(`/actors`)
-    } catch {
-        if(actor == null){
-            res.redirect('/');
-        } else {    
-            res.redirect(`/actors/${actor.id}`);
+        actor = await Actor.findByIdAndDelete(req.params.id);
+        if(!actor){
+            res.status(404).json({
+                status: 'fail',
+                message: 'No Actor found with this ID'
+            });
         }
+        res.status(204).json({
+            status: 'success',
+            data: null
+        });
+    } catch(error) {
+        res.status(404).json({
+            status:'Error',
+            results: error
+        });
     }
 }
