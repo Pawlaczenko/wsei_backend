@@ -22,31 +22,38 @@ exports.createMovie = async (req,res)=>{
     const movie = new Movie({
         title: req.body.title,
         director: req.body.director,
+        genre: req.body.genre,
         releaseDate: new Date(req.body.releaseDate),
         duration: req.body.duration,
         description: req.body.description,
     });
-    savePoster(movie,req.body.poster);
 
     try {
         const newMovie = await movie.save();
-        res.redirect(`movies/${newMovie.id}`);
-    } catch {
-        renderNewPage(res,movie,true);
+        res.status(201).json({
+            status: 'success',
+            data: newMovie
+        })
+    } catch(error) {
+        res.status(404).json({
+            status: 'fail',
+            messege: error
+        });
     }
 }
 
 exports.getOneMovie = async(req,res)=>{
     try {
-        const movie = await Movie.findById(req.params.id).populate('director').exec();
-        res.status(204).json({
+        const movie = await Movie.findById(req.params.id).populate('director').populate('genre').exec();
+
+        res.status(200).json({
             status: 'success',
             data: movie
         });
     } catch(err) {
         res.status(404).json({
             status: 'fail',
-            messege: 'Something went wrong'
+            messege: error
         });
     }
 }
@@ -56,90 +63,52 @@ exports.editMovie = async(req,res)=>{
 
     try {
         movie = await Movie.findById(req.params.id);
+
+        if(!movie){
+            res.status(404).json({
+                status: 'fail',
+                message: 'Movie with this Id doesn\'t exist'
+            })
+        }
+
         movie.title = req.body.title;
         movie.director = req.body.director;
+        movie.genre = req.body.genre;
         movie.releaseDate = new Date(req.body.releaseDate);
         movie.duration = req.body.duration;
         movie.description = req.body.description;
         
-        if(req.body.poster != null && req.body.poster !== ''){
-            savePoster(movie, req.body.poster);
-        }
         await movie.save();
-        res.redirect(`/movies/${movie.id}`);
+        res.status(201).json({
+            status: 'success',
+            message: 'Movie edited',
+            data: movie
+        })
     } catch(error) {
-        console.log(error);
-        if(movie != null){
-            renderEditPage(res,movie,true);
-        } else {
-            res.redirect('/');
-        }   
+        res.status(404).json({
+            status: 'fail',
+            message: error.message,
+        })
     }
 }
 
 exports.deleteMovie = async (req, res)=>{
     let movie;
     try {
-        movie = await Movie.findById(req.params.id);
-        await movie.remove();
-        res.redirect('/movies');
-    } catch {
-        if(movie != null){
-            res.render('movies/show', {
-                movie: movie,
-                errorMessage: 'Could not remove movie'
-            });
-        } else {
-            res.redirect('/');
-        }
+        movie = await Movie.findByIdAndDelete(req.params.id);
+        res.status(201).json({
+            status: 'success',
+            message: 'Movie deleted',
+            data: null
+        })
+    } catch(error) {
+        res.status(404).json({
+            status: 'fail',
+            message: error.message,
+        })
     }
 }
-
-exports.getEditMoviePage = async (req, res)=>{
-    try {
-        const movie = await Movie.findById(req.params.id);
-        renderEditPage(res,movie);
-    } catch {
-        res.redirect('/');
-    }
-}
-
-exports.getNewMoviePage = async (req,res)=>{
-    await renderNewPage(res,new Movie());
-};
 
 exports.getMoviesByDirector = async (directorId, limit = 5) => {
     return await Movie.find({director: directorId}).limit(limit).exec();
-}
-
-renderNewPage = async (res, movie, hasError = false ) => {
-    renderFormPage(res,movie,'new',hasError);
-}
-
-renderEditPage = async (res, movie, hasError = false ) => {
-    renderFormPage(res,movie,'edit',hasError);
-}
-
-const renderFormPage = async (res, movie, form, hasError = false ) => {
-    try {
-        const directors = await Director.find({});
-        const params = {
-            directors: directors,
-            movie: movie
-        }
-        if(hasError) params.errorMessage = 'Error Creating a Movie';
-        res.render(`movies/${form}`,params);
-    } catch(err) {
-        res.redirect('/movies');
-    }
-}
-
-savePoster = (movie, poster) => {
-    const imageTypes = ['image/jpeg','image/png','image/gif'];
-    if(poster==null) return;
-    const posterObject = JSON.parse(poster);
-    if(posterObject != null && imageTypes.includes(posterObject.type)){
-        movie.posterImage = new Buffer.from(posterObject.data,'base64');
-        movie.posterImageType = posterObject.type;
-    }
 }

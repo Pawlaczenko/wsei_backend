@@ -20,12 +20,6 @@ const movieSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    posterImage:{
-        type: Buffer,
-    },
-    posterImageType: {
-        type: String,
-    },
     director: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
