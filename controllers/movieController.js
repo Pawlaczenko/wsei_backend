@@ -3,23 +3,18 @@ const Director = require('../models/director');
 
 exports.getAllMovies = async(req,res) => {
     let query = Movie.find();
-    if(req.query.title != null && req.query.title != ''){
-        query = query.regex('title', new RegExp(req.query.title, 'i'));
-    }
-    if(req.query.releasedBefore != null && req.query.releasedBefore != ''){
-        query = query.lte('releaseDate', req.query.releasedBefore);
-    }
-    if(req.query.releasedAfter != null && req.query.releasedAfter != ''){
-        query = query.gte('releaseDate', req.query.releasedAfter);
-    }
     try {
         const movies = await query.exec();
-        res.render('movies/index',{
+        res.status(200).json({
             movies: movies,
-            searchOptions: req.query
+            results: movies.length,
+            status: 'success'
         })
     } catch (error) {
-        res.redirect('/');
+        res.status(404).json({
+            status: 'fail',
+            messege: error
+        })
     }
 }
 
@@ -44,9 +39,15 @@ exports.createMovie = async (req,res)=>{
 exports.getOneMovie = async(req,res)=>{
     try {
         const movie = await Movie.findById(req.params.id).populate('director').exec();
-        res.render('movies/show',{movie:movie});
-    } catch {
-        res.redirect('/');
+        res.status(204).json({
+            status: 'success',
+            data: movie
+        });
+    } catch(err) {
+        res.status(404).json({
+            status: 'fail',
+            messege: 'Something went wrong'
+        });
     }
 }
 
@@ -60,6 +61,7 @@ exports.editMovie = async(req,res)=>{
         movie.releaseDate = new Date(req.body.releaseDate);
         movie.duration = req.body.duration;
         movie.description = req.body.description;
+        
         if(req.body.poster != null && req.body.poster !== ''){
             savePoster(movie, req.body.poster);
         }

@@ -30,13 +30,12 @@ const movieSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Director'
-    }
-});
-
-movieSchema.virtual('posterImagePath').get(function(){
-    if(this.posterImage != null && this.posterImageType != null){
-        return `data:${this.posterImageType};charset=utf-8;base64,${this.posterImage.toString('base64')}`;
-    }
+    },
+    genre: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Genre'
+    },
 });
 
 module.exports = mongoose.model('Movie', movieSchema);
