@@ -1,15 +1,15 @@
 - [x] Przygotować bazę danych
-- [x] Wyszukiwanie, filtrowanie, sortowanie filmów.
+- [ ] Wyszukiwanie
+- [ ] Filtrowanie
+- [ ] Sortowanie
 - [ ] Paginacja
-- [x] Strona filmu
-- [ ] REST API
-- [ ] Użytkownicy
-- [ ] Profil użytkownika
-- [ ] Podstawowe UI
+- [x] Basic REST API
+- [ ] Użytkownicy REST API
 - [ ] Walidacja danych
 - [ ] Handling errorów
-- [ ] Zarządzanie sesją
 - [ ] Dokumentacja
 - [x] Podstawowe routy
 - [ ] Eksport powtarzalnych elementów do partiali
 - [ ] Prywatne biblioteki usera
+- [ ] Hosting
+- [ ] Serwisy

@@ -4,7 +4,7 @@ const Director = require('../models/director');
 exports.getAllMovies = async(req,res) => {
     let query = Movie.find();
     try {
-        const movies = await query.exec();
+        const movies = await query.populate('director').populate('genre').exec();
         res.status(200).json({
             movies: movies,
             results: movies.length,
