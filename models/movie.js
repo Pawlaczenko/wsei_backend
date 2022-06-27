@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Actor = require('./actor');
 
 const movieSchema = new mongoose.Schema({
     title: {
@@ -30,6 +31,30 @@ const movieSchema = new mongoose.Schema({
         required: true,
         ref: 'Genre'
     },
+    actors: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Actor'
+    }]
 });
+
+movieSchema.pre('find', function(next) {
+    this.populate({path: 'director'})
+        .populate({path:'genre'})
+        .populate({path:'actors',select: 'firstName lastName'})
+    next();
+});
+
+movieSchema.pre('findOne', function(next) {
+    this.populate({path: 'director'})
+        .populate({path:'genre'})
+        .populate({path:'actors',select: 'firstName lastName'})
+    next();
+});
+
+// movieSchema.pre('save', function(next){
+//     [this.actors].map(actorId => {
+
+//     });
+// });
 
 module.exports = mongoose.model('Movie', movieSchema);

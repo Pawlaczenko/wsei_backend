@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Movie = require('./movie');
 
 const actorSchema = new mongoose.Schema({
     firstName: {
@@ -9,19 +8,11 @@ const actorSchema = new mongoose.Schema({
     lastName: {
         type: String,
         required: true,
-    }
-});
-
-actorSchema.pre('remove', function(next){
-    Movie.find({actor: this.id},(err,movies)=>{
-        if(err){
-            next(err);
-        } else if(movies.length >0){
-            next(new Error("This actor belongs to a movie"));
-        } else {
-            next();
-        }
-    });
+    },
+    movies: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Movie"
+    }]
 });
 
 module.exports = mongoose.model('Actor',actorSchema);

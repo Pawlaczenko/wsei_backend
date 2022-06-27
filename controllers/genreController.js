@@ -19,11 +19,7 @@ exports.getAllGenres = async (req, res) => {
 
 exports.createGenre = async (req, res) => {
     try {
-        const genre = new Genre({
-            name: req.body.name
-        });
-    
-        const newGenre = await genre.save();
+        const genre = await Genre.create(req.body);
         res.status(201).json({
             status: 'success',
             data: newGenre
@@ -55,10 +51,10 @@ exports.getOneGenre = async (req,res)=>{
 exports.editGenre = async (req,res, next)=>{
     let genre;
     try {
-        genre = await Genre.findById(req.params.id);
-        genre.name = req.body.name;
-
-        await genre.save();
+        genre = await Genre.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
         res.status(200).json({
             status: 'success',
             data: genre

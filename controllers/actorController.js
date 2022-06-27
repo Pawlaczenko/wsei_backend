@@ -13,18 +13,13 @@ exports.getAllActors = async (req, res) => {
         res.status(404).json({
             status:'Error',
             results: error
-        })
+        });
     }
 }
 
 exports.createActor = async (req, res) => {
     try {
-        const actor = new Actor({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName
-        });
-    
-        const newActor = await actor.save();
+        const actor = await Actor.save(req.body);
         res.status(201).json({
             status: 'success',
             data: newActor
@@ -54,13 +49,12 @@ exports.getOneActor = async (req,res)=>{
 }
 
 exports.editActor = async (req,res, next)=>{
-    let actor;
     try {
-        actor = await Actor.findById(req.params.id);
-        actor.firstName = req.body.firstName;
-        actor.lastName = req.body.lastName;
+        let actor = await Actor.findByIdAndUpdate(req.params.id,req.body,{
+            new: true,
+            runValidators: true
+        });
 
-        await actor.save();
         res.status(200).json({
             status: 'success',
             data: actor

@@ -19,12 +19,7 @@ exports.getAllDirectors = async (req, res) => {
 
 exports.createDirector = async (req, res) => {
     try {
-        const director = new Director({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName
-        });
-    
-        const newDirector = await director.save();
+        const director = await Director.create(req.body);
         res.status(201).json({
             status: 'success',
             data: newDirector
@@ -56,11 +51,11 @@ exports.getOneDirector = async (req,res)=>{
 exports.editDirector = async (req,res, next)=>{
     let director;
     try {
-        director = await Director.findById(req.params.id);
-        director.firstName = req.body.firstName;
-        director.lastName = req.body.lastName;
+        director = await Director.findByIdAndUpdate(req.params.id,req.body,{
+            new: true,
+            runValidators: true
+        });
 
-        await director.save();
         res.status(200).json({
             status: 'success',
             data: director
