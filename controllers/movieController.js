@@ -41,7 +41,7 @@ exports.getOneMovie = async(req,res)=>{
             status: 'success',
             data: movie
         });
-    } catch(err) {
+    } catch(error) {
         res.status(404).json({
             status: 'fail',
             messege: error
