@@ -1,7 +1,8 @@
 const Genre = require('../models/genre');
+const globalTryCatchAsync = require('../utils/globalTryCatchAsync');
 
-exports.getAllGenres = async (req, res) => {
-    try{
+exports.getAllGenres = globalTryCatchAsync(
+    async (req, res, next) => {
         const genres = await Genre.find();
         res.status(200).json({
             status: 'success',
@@ -9,49 +10,33 @@ exports.getAllGenres = async (req, res) => {
             results: genres.length,
             data: genres
         });
-    } catch(error) {
-        res.status(404).json({
-            status:'Error',
-            results: error
-        })
     }
-}
+)
 
-exports.createGenre = async (req, res) => {
-    try {
+exports.createGenre = globalTryCatchAsync(
+    async (req, res, next) => {
         const genre = await Genre.create(req.body);
         res.status(201).json({
             status: 'success',
             data: newGenre
         })
-    } catch (error) {
-        res.status(404).json({
-            status:'Error',
-            results: error.message
-        })
     }
-}
+);
 
-exports.getOneGenre = async (req,res)=>{
-    try {
+exports.getOneGenre = globalTryCatchAsync(
+    async (req,res, next)=>{
         const genre = await Genre.findById(req.params.id);
         res.status(200).json({
             status: 'success',
             requestedAt: req.requestTime,
             data: genre
         }); 
-    } catch (error) {
-        res.status(404).json({
-            status:'Error',
-            results: error
-        })
     }
-}
+)
 
-exports.editGenre = async (req,res, next)=>{
-    let genre;
-    try {
-        genre = await Genre.findByIdAndUpdate(req.params.id, req.body, {
+exports.editGenre = globalTryCatchAsync(
+    async (req,res, next)=>{
+        let genre = await Genre.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true
         });
@@ -59,31 +44,15 @@ exports.editGenre = async (req,res, next)=>{
             status: 'success',
             data: genre
         })
-    } catch(error) { 
-        res.status(404).json({
-            status:'Error',
-            results: error
-        })
     }
-}
+)
 
-exports.deleteGenre = async (req,res)=>{
-    try {
+exports.deleteGenre = globalTryCatchAsync(
+    async (req,res, next)=>{
         genre = await Genre.findByIdAndDelete(req.params.id);
-        if(!genre){
-            res.status(404).json({
-                status: 'fail',
-                message: 'No Genre found with this ID'
-            });
-        }
         res.status(204).json({
             status: 'success',
             data: null
         });
-    } catch(error) {
-        res.status(404).json({
-            status:'Error',
-            results: error
-        });
     }
-}
+)
