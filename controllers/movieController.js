@@ -26,7 +26,10 @@ exports.createMovie = globalTryCatchAsync(
 exports.getOneMovie = globalTryCatchAsync(
     async(req,res, next)=>{
         const movie = await Movie.findById(req.params.id)
-
+        if(!movie){
+            const error = new ErrorHandler("Movie with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(200).json({
             status: 'success',
             data: movie
@@ -40,7 +43,10 @@ exports.editMovie = globalTryCatchAsync(
             new: true,
             runValidators: true
         });
-        
+        if(!movie){
+            const error = new ErrorHandler("Movie with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(201).json({
             status: 'success',
             message: 'Movie edited',
@@ -52,6 +58,10 @@ exports.editMovie = globalTryCatchAsync(
 exports.deleteMovie = globalTryCatchAsync(
     async (req, res, next)=>{
         let movie = await Movie.findByIdAndDelete(req.params.id);
+        if(!movie){
+            const error = new ErrorHandler("Movie with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(201).json({
             status: 'success',
             message: 'Movie deleted',

@@ -1,4 +1,5 @@
 const Actor = require('../models/actor');
+const ErrorHandler = require('../utils/errorHandler');
 const globalTryCatchAsync = require('../utils/globalTryCatchAsync');
 
 exports.getAllActors = globalTryCatchAsync(
@@ -18,7 +19,7 @@ exports.createActor = globalTryCatchAsync(
         const actor = await Actor.create(req.body);
         res.status(201).json({
             status: 'success',
-            data: newActor
+            data: actor
         })
     }
 );
@@ -26,6 +27,10 @@ exports.createActor = globalTryCatchAsync(
 exports.getOneActor = globalTryCatchAsync(
     async (req,res, next)=>{
         const actor = await Actor.findById(req.params.id);
+        if(!actor){
+            const error = new ErrorHandler("Actor with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(200).json({
             status: 'success',
             requestedAt: req.requestTime,
@@ -40,7 +45,10 @@ exports.editActor = globalTryCatchAsync(
             new: true,
             runValidators: true
         });
-
+        if(!actor){
+            const error = new ErrorHandler("Actor with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(200).json({
             status: 'success',
             data: actor
@@ -50,10 +58,15 @@ exports.editActor = globalTryCatchAsync(
 
 exports.deleteActor = globalTryCatchAsync(
     async (req,res, next)=>{
-        actor = await Actor.findByIdAndDelete(req.params.id);
+        await Actor.findByIdAndDelete(req.params.id);
+        if(!actor){
+            const error = new ErrorHandler("Actor with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(204).json({
             status: 'success',
-            data: null
+            data: null,
+            message: "Successfully deleted actor"
         });
     }
 )

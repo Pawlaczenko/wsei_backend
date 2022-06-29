@@ -1,6 +1,10 @@
-if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config();
-}
+require('dotenv').config();
+
+process.on('uncaughtException', err => {
+    console.log("____Uncought exception____");
+    console.log(err.name,err.message);
+    process.exit(1);
+});
 
 const express = require('express');
 const app = express();
@@ -22,7 +26,6 @@ mongoose.connect(process.env.DATABASE_URL, {
 });
 
 const db = mongoose.connection;
-db.on('error',error => console.error(error));
 db.once('open',() => console.log("Connected to mongoose"));
 
 app.use('/',indexRouter);
@@ -37,4 +40,13 @@ app.all('*', (req,res,next)=> {
 
 app.use(errorControler);
 
-app.listen(process.env.PORT || 3000);
+const server = app.listen(process.env.PORT || 3000);
+
+process.on('unhandledRejection', err => {
+    console.log("____nhandled rejection____");
+    console.log(err.name,err.message);
+    server.close(()=>{
+        process.exit(1);
+    });
+});
+

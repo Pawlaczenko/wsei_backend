@@ -18,7 +18,7 @@ exports.createDirector = globalTryCatchAsync(
         const director = await Director.create(req.body);
         res.status(201).json({
             status: 'success',
-            data: newDirector
+            data: director
         })
     }
 );
@@ -26,6 +26,10 @@ exports.createDirector = globalTryCatchAsync(
 exports.getOneDirector = globalTryCatchAsync(
     async (req,res, next)=>{
         const director = await Director.findById(req.params.id);
+        if(!director){
+            const error = new ErrorHandler("Director with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(200).json({
             status: 'success',
             requestedAt: req.requestTime,
@@ -42,7 +46,10 @@ exports.editDirector = globalTryCatchAsync(
             new: true,
             runValidators: true
         });
-
+        if(!director){
+            const error = new ErrorHandler("Director with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(200).json({
             status: 'success',
             data: director
@@ -52,7 +59,11 @@ exports.editDirector = globalTryCatchAsync(
 
 exports.deleteDirector = globalTryCatchAsync(
      async (req,res, next)=>{
-        director = await Director.findByIdAndDelete(req.params.id);
+        const director = await Director.findByIdAndDelete(req.params.id);
+        if(!director){
+            const error = new ErrorHandler("Director with given id doesn't exist.",404);
+            return next(error);
+        }
         res.status(204).json({
             status: 'success',
             data: null
