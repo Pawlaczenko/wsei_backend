@@ -1,10 +1,19 @@
 const Movie = require('../models/movie');
 const Director = require('../models/director');
-const globalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalQuerying = require('../utils/globalQuerying');
 
-exports.getAllMovies = globalTryCatchAsync(
+exports.getAllMovies = GlobalTryCatchAsync(
     async(req,res, next) => {
-        const movies = await Movie.find();
+
+        const finalQuery = new GlobalQuerying(Movie.find(),req.query)
+            .filter(next)
+            .sort()
+            .limitFields()
+            .paginate();
+
+        const movies = await finalQuery.query;
+
         res.status(200).json({
             movies: movies,
             results: movies.length,
@@ -13,7 +22,7 @@ exports.getAllMovies = globalTryCatchAsync(
     }
 );
 
-exports.createMovie = globalTryCatchAsync(
+exports.createMovie = GlobalTryCatchAsync(
     async (req,res, next)=>{
         const newMovie = await Movie.create(req.body);
         res.status(201).json({
@@ -23,7 +32,7 @@ exports.createMovie = globalTryCatchAsync(
     }
 );
 
-exports.getOneMovie = globalTryCatchAsync(
+exports.getOneMovie = GlobalTryCatchAsync(
     async(req,res, next)=>{
         const movie = await Movie.findById(req.params.id)
         if(!movie){
@@ -37,7 +46,7 @@ exports.getOneMovie = globalTryCatchAsync(
     }
 )
 
-exports.editMovie = globalTryCatchAsync(
+exports.editMovie = GlobalTryCatchAsync(
     async(req,res, next)=>{
         let movie = await Movie.findByIdAndUpdate(req.params.id, req.body,{
             new: true,
@@ -55,7 +64,7 @@ exports.editMovie = globalTryCatchAsync(
     }
 );
 
-exports.deleteMovie = globalTryCatchAsync(
+exports.deleteMovie = GlobalTryCatchAsync(
     async (req, res, next)=>{
         let movie = await Movie.findByIdAndDelete(req.params.id);
         if(!movie){

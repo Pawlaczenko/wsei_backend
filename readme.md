@@ -4,8 +4,8 @@
 - [ ] Paginacja
 - [x] Basic REST API
 - [x] Kontrolery
-- [ ] Walidacja danych
-- [ ] Handling errorów
+- [x] Walidacja danych
+- [x] Handling errorów
 - [ ] Eksport powtarzalnych elementów do funkcji
 - [ ] Użytkownicy REST API
 - [ ] Prywatne biblioteki usera

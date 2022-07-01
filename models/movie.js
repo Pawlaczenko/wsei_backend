@@ -19,8 +19,8 @@ const movieSchema = new mongoose.Schema({
     duration: {
         type: Number,
         required: [true, 'A movie must have a duration time in minutes'],
-        minlength: [1, 'A movie must be at least a minute long'],
-        maxlength: [5100, 'A movie musn\'t be longer than 5100 minutes long'],
+        min: [1, 'A movie must be at least a minute long'],
+        max: [5100, 'A movie musn\'t be longer than 5100 minutes long'],
     },
     releaseDate: {
         type: Date,
@@ -43,9 +43,12 @@ const movieSchema = new mongoose.Schema({
 });
 
 movieSchema.pre('find', function(next) {
-    this.populate({path: 'director'})
-        .populate({path:'genre'})
-        .populate({path:'actors',select: 'firstName lastName'})
+    const fields = {...this._fields};
+    
+    if(fields.director) this.populate({path: 'director'});
+    if(fields.genre) this.populate({path:'genre'});
+    if(fields.actors) this.populate({path:'actors',select: 'firstName lastName'});
+
     next();
 });
 
