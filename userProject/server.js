@@ -12,7 +12,10 @@ const app = express();
 const ErrorHandler = require('./utils/errorHandler');
 const errorControler = require('./controllers/errorController');
 
+const userRouter = require('./routes/users');
+
 app.use(express.json());
+app.use('/users',userRouter);
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {
