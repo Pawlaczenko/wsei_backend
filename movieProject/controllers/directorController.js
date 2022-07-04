@@ -1,4 +1,5 @@
 const Director = require('../models/director');
+const ErrorHandler = require('../utils/errorHandler');
 const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
 const GlobalQuerying = require('../utils/globalQuerying');
 

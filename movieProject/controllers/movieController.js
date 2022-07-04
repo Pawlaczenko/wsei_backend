@@ -1,11 +1,11 @@
 const Movie = require('../models/movie');
+const ErrorHandler = require('../utils/errorHandler');
 const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
 const GlobalQuerying = require('../utils/globalQuerying');
 
 exports.getAllMovies = GlobalTryCatchAsync(
     async(req,res, next) => {
-
-        const queryObj = new GlobalQuerying(Movie.find(),req.query)
+        const queryObj = new GlobalQuerying(Movie.find(), req.query)
             .filter()
             .sort()
             .limitFields()

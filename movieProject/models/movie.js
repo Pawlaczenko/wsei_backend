@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Actor = require('./actor');
 
 const movieSchema = new mongoose.Schema({
     title: {
