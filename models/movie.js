@@ -39,7 +39,12 @@ const movieSchema = new mongoose.Schema({
     actors: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Actor'
-    }]
+    }],
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        select: false
+    }
 });
 
 movieSchema.pre('find', function(next) {
@@ -58,11 +63,5 @@ movieSchema.pre('findOne', function(next) {
         .populate({path:'actors',select: 'firstName lastName'})
     next();
 });
-
-// movieSchema.pre('save', function(next){
-//     [this.actors].map(actorId => {
-
-//     });
-// });
 
 module.exports = mongoose.model('Movie', movieSchema);

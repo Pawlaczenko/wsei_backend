@@ -6,7 +6,7 @@ const {
     createMovie,
     getOneMovie,
     editMovie,
-    deleteMovie,
+    deleteMovie
 } = require('../controllers/movieController');
 
 router.route('/')
@@ -17,6 +17,5 @@ router.route('/:id')
     .get(getOneMovie)
     .put(editMovie)
     .delete(deleteMovie);
-
 
 module.exports = router;

@@ -1,18 +1,17 @@
 const Movie = require('../models/movie');
-const Director = require('../models/director');
 const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
 const GlobalQuerying = require('../utils/globalQuerying');
 
 exports.getAllMovies = GlobalTryCatchAsync(
     async(req,res, next) => {
 
-        const finalQuery = new GlobalQuerying(Movie.find(),req.query)
-            .filter(next)
+        const queryObj = new GlobalQuerying(Movie.find(),req.query)
+            .filter()
             .sort()
             .limitFields()
             .paginate();
 
-        const movies = await finalQuery.query;
+        const movies = await queryObj.query;
 
         res.status(200).json({
             movies: movies,
@@ -78,7 +77,3 @@ exports.deleteMovie = GlobalTryCatchAsync(
         })
     }
 );
-
-exports.getMoviesByDirector = async (directorId, limit = 5) => {
-    return await Movie.find({director: directorId}).limit(limit).exec();
-}

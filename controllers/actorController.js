@@ -1,10 +1,17 @@
 const Actor = require('../models/actor');
 const ErrorHandler = require('../utils/errorHandler');
-const globalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalQuerying = require('../utils/globalQuerying');
 
-exports.getAllActors = globalTryCatchAsync(
+exports.getAllActors = GlobalTryCatchAsync(
     async (req, res, next) => {
-        const actors = await Actor.find();
+        const queryObj = new GlobalQuerying(Actor.find(),req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+        const actors = await queryObj.query;
+
         res.status(200).json({
             status: 'success',
             requestedAt: req.requestTime,
@@ -14,7 +21,7 @@ exports.getAllActors = globalTryCatchAsync(
     }
 )
 
-exports.createActor = globalTryCatchAsync(
+exports.createActor = GlobalTryCatchAsync(
     async (req, res, next) => {
         const actor = await Actor.create(req.body);
         res.status(201).json({
@@ -24,7 +31,7 @@ exports.createActor = globalTryCatchAsync(
     }
 );
 
-exports.getOneActor = globalTryCatchAsync(
+exports.getOneActor = GlobalTryCatchAsync(
     async (req,res, next)=>{
         const actor = await Actor.findById(req.params.id);
         if(!actor){
@@ -39,7 +46,7 @@ exports.getOneActor = globalTryCatchAsync(
     }
 );
 
-exports.editActor = globalTryCatchAsync(
+exports.editActor = GlobalTryCatchAsync(
     async (req,res, next)=>{
         let actor = await Actor.findByIdAndUpdate(req.params.id,req.body,{
             new: true,
@@ -56,7 +63,7 @@ exports.editActor = globalTryCatchAsync(
     }
 )
 
-exports.deleteActor = globalTryCatchAsync(
+exports.deleteActor = GlobalTryCatchAsync(
     async (req,res, next)=>{
         await Actor.findByIdAndDelete(req.params.id);
         if(!actor){

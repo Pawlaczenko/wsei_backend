@@ -1,19 +1,27 @@
 const Director = require('../models/director');
-const globalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalQuerying = require('../utils/globalQuerying');
 
-exports.getAllDirectors = globalTryCatchAsync(
+exports.getAllDirectors = GlobalTryCatchAsync(
     async (req, res, next) => {
-        const directors = await Director.find();
-            res.status(200).json({
-                status: 'success',
-                requestedAt: req.requestTime,
-                results: directors.length,
-                data: directors
+        const queryObj = new GlobalQuerying(Director.find(),req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+
+        const directors = await queryObj.query;
+
+        res.status(200).json({
+            status: 'success',
+            requestedAt: req.requestTime,
+            results: directors.length,
+            data: directors
         });
     }
 );
 
-exports.createDirector = globalTryCatchAsync(
+exports.createDirector = GlobalTryCatchAsync(
     async (req, res, next) => {
         const director = await Director.create(req.body);
         res.status(201).json({
@@ -23,7 +31,7 @@ exports.createDirector = globalTryCatchAsync(
     }
 );
 
-exports.getOneDirector = globalTryCatchAsync(
+exports.getOneDirector = GlobalTryCatchAsync(
     async (req,res, next)=>{
         const director = await Director.findById(req.params.id);
         if(!director){
@@ -39,7 +47,7 @@ exports.getOneDirector = globalTryCatchAsync(
     }
 )
 
-exports.editDirector = globalTryCatchAsync(
+exports.editDirector = GlobalTryCatchAsync(
     async (req,res, next)=>{
 
         let director = await Director.findByIdAndUpdate(req.params.id,req.body,{
@@ -57,7 +65,7 @@ exports.editDirector = globalTryCatchAsync(
     }
 )
 
-exports.deleteDirector = globalTryCatchAsync(
+exports.deleteDirector = GlobalTryCatchAsync(
      async (req,res, next)=>{
         const director = await Director.findByIdAndDelete(req.params.id);
         if(!director){

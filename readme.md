@@ -1,12 +1,12 @@
 - [x] Przygotować bazę danych
 - [x] Podstawowe routy
-- [ ] Wyszukiwanie, Filtrowanie, Sortowanie queries
-- [ ] Paginacja
+- [x] Wyszukiwanie, Filtrowanie, Sortowanie queries
+- [x] Paginacja
 - [x] Basic REST API
 - [x] Kontrolery
 - [x] Walidacja danych
 - [x] Handling errorów
-- [ ] Eksport powtarzalnych elementów do funkcji
+- [x] Eksport powtarzalnych elementów do funkcji
 - [ ] Użytkownicy REST API
 - [ ] Prywatne biblioteki usera
 - [ ] Hosting

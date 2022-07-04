@@ -1,9 +1,16 @@
 const Genre = require('../models/genre');
-const globalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const GlobalQuerying = require('../utils/globalQuerying');
 
-exports.getAllGenres = globalTryCatchAsync(
+exports.getAllGenres = GlobalTryCatchAsync(
     async (req, res, next) => {
-        const genres = await Genre.find();
+        const queryObj = new GlobalQuerying(Genre.find(),req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+        const genres = await queryObj.query;
+        
         res.status(200).json({
             status: 'success',
             requestedAt: req.requestTime,
@@ -13,7 +20,7 @@ exports.getAllGenres = globalTryCatchAsync(
     }
 )
 
-exports.createGenre = globalTryCatchAsync(
+exports.createGenre = GlobalTryCatchAsync(
     async (req, res, next) => {
         const genre = await Genre.create(req.body);
         res.status(201).json({
@@ -23,7 +30,7 @@ exports.createGenre = globalTryCatchAsync(
     }
 );
 
-exports.getOneGenre = globalTryCatchAsync(
+exports.getOneGenre = GlobalTryCatchAsync(
     async (req,res, next)=>{
         const genre = await Genre.findById(req.params.id);
         if(!genre){
@@ -38,7 +45,7 @@ exports.getOneGenre = globalTryCatchAsync(
     }
 )
 
-exports.editGenre = globalTryCatchAsync(
+exports.editGenre = GlobalTryCatchAsync(
     async (req,res, next)=>{
         let genre = await Genre.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -55,7 +62,7 @@ exports.editGenre = globalTryCatchAsync(
     }
 )
 
-exports.deleteGenre = globalTryCatchAsync(
+exports.deleteGenre = GlobalTryCatchAsync(
     async (req,res, next)=>{
         genre = await Genre.findByIdAndDelete(req.params.id);
         if(!genre){

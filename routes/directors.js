@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const Director = require('../models/director');
 
 const {
     getAllDirectors,

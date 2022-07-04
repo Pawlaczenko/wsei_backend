@@ -4,7 +4,7 @@ class GlobalQuerying{
         this.queryString = queryString;
     }
 
-    filter(next) {
+    filter() {
         const queryCopy = {...this.queryString};
         const excludeFields = ['page','sort','limit','fields'];
         excludeFields.forEach(el => delete queryCopy[el]);
@@ -14,7 +14,6 @@ class GlobalQuerying{
         
         this.query = this.query.find(JSON.parse(queryString));
         
-        // next();
         return this;
     }
 
@@ -23,7 +22,7 @@ class GlobalQuerying{
             const sortBy = this.queryString.sort.split(',').join(' ');
             this.query = this.query.sort(sortBy);
         } else {
-            this.query = this.query.sort('-releaseDate')
+            this.query = this.query.sort('-createdAt')
         }
 
         return this;

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {getMoviesByActor} = require('../controllers/movieController');
 
 const actorSchema = new mongoose.Schema({
     firstName: {
@@ -9,10 +10,18 @@ const actorSchema = new mongoose.Schema({
         type: String,
         required: [true, "Lastname is required for Actor"],
     },
-    movies: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Movie"
-    }]
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        select: false
+    }
+},{
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true} 
+});
+
+actorSchema.virtual('movies').get(function(){
+    return getMoviesByActor(this._id);
 });
 
 actorSchema.index({firstName: 1, lastName: 1},{unique: true});

@@ -7,6 +7,11 @@ const genreSchema = new mongoose.Schema({
         maxlength: [50, 'A genre name must be less or equal to 50 characters'],
         minlength: [2, 'A genre name must be more or equal to 2 characters'],
         unique: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        select: false
     }
 });
 

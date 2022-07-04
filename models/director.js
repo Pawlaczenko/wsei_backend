@@ -9,6 +9,11 @@ const directorSchema = new mongoose.Schema({
     lastName: {
         type: String,
         required: [true, "Lastname is required for Director"],
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        select: false
     }
 });
 
