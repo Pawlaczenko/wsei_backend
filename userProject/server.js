@@ -1,4 +1,7 @@
 require('dotenv').config();
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 
 process.on('uncaughtException', err => {
     console.log("____Uncought exception____");
@@ -11,6 +14,10 @@ const app = express();
 
 const ErrorHandler = require('./utils/errorHandler');
 const errorControler = require('./controllers/errorController');
+
+app.use(mongoSanitize());
+app.use(xss()); 
+app.use(hpp()); //parameter polution
 
 const userRouter = require('./routes/users');
 

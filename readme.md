@@ -7,7 +7,9 @@
 - [x] Walidacja danych
 - [x] Handling errorów
 - [x] Eksport powtarzalnych elementów do funkcji
-- [ ] Użytkownicy REST API
+- [x] Użytkownicy REST API
+- [x] Mikroserwisy
+- [x] Stworzyć gateway
+- [ ] Autoryzacja i Autentykacja
 - [ ] Hosting
-- [ ] Serwisy
 - [ ] Dokumentacja

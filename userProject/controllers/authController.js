@@ -3,6 +3,7 @@ const {promisify} = require('util');
 const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler');
 const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
+const {convertDaysToMiliseconds} = require('../utils/generalUtils');
 
 const jwt = require('jsonwebtoken');
 
@@ -12,6 +13,15 @@ const signToken = id => {
 
 const createAndSendToken = (user, statusCode,res)=>{
     const token = signToken(user._id);
+    const cookieOptions = {
+        expires: new Date(Date.now() + convertDaysToMiliseconds(30)),
+        httpOnly: true
+
+    };
+    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    res.cookie('token',token,cookieOptions);
+
+    user.password = undefined;
 
     res.status(statusCode).json({
         status: 'success',
