@@ -8,7 +8,6 @@
 - [x] Handling errorów
 - [x] Eksport powtarzalnych elementów do funkcji
 - [ ] Użytkownicy REST API
-- [ ] Prywatne biblioteki usera
 - [ ] Hosting
 - [ ] Serwisy
 - [ ] Dokumentacja

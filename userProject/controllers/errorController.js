@@ -43,6 +43,14 @@ const handleValidationError = (err) => {
     return new ErrorHandler(message, 400);
 }
 
+const handleJWTError = () => {
+    return new ErrorHandler('Invalid token. Login again.', 401);
+}
+
+const handleTokenExpiredError = () => {
+    return new ErrorHandler('Expired token. Login again.', 401);
+}
+
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
@@ -55,6 +63,8 @@ module.exports = (err, req, res, next) => {
         if(error.name === 'CastError') error = handleCastError(error);
         if(error.code === 11000) error = handleDuplicationError(error);
         if(error.name === 'ValidationError') error = handleValidationError(error);
+        if(error.name === 'JsonWebTokenError') error = handleJWTError();
+        if(error.name === 'TokenExpiredError') error = handleTokenExpiredError();
 
         handleProductionError(error,res);
     } else {

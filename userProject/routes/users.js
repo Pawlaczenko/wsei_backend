@@ -5,6 +5,10 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 router
+    .route('/changePassword')
+    .patch(authController.protect, authController.changePassword)
+
+router
     .route('/register')
     .post(authController.register);
 

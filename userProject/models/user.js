@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
         validate: [validator.isEmail, 'This email is not valid'],
         unique: true
     },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: 'user'
+    },
     password: {
         type: String,
         required: [true, "Password is required for user"],
@@ -40,6 +45,9 @@ const userSchema = new mongoose.Schema({
             },
             message: "Passwords don't match."
         }
+    },
+    passwordChangedAt: {
+        type: Date
     }
 });
 
@@ -52,6 +60,14 @@ userSchema.pre('save', async function(next){
 
 userSchema.methods.checkPassword = async function(incomingPassword, userPassword) {
     return await bcrypt.compare(incomingPassword, userPassword);
+}
+
+userSchema.methods.isPasswordChanged = function(tokenTime) {
+    if(this.passwordChangedAt) {
+        const passwordChangedAtMiliseconds = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+        return passwordChangedAtMiliseconds > tokenTime;
+    }
+    return false;
 }
 
 module.exports = mongoose.model('User', userSchema);
