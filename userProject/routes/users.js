@@ -9,6 +9,14 @@ router
     .patch(authController.protect, authController.changePassword)
 
 router
+    .route('/updateSignedUser')
+    .patch(authController.protect, userController.updateSignedUser);
+
+router
+    .route('/deleteSignedUser')
+    .delete(authController.protect, userController.deleteSignedUser);
+
+router
     .route('/register')
     .post(authController.register);
 

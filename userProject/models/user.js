@@ -48,6 +48,11 @@ const userSchema = new mongoose.Schema({
     },
     passwordChangedAt: {
         type: Date
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+        select: false
     }
 });
 
@@ -56,6 +61,11 @@ userSchema.pre('save', async function(next){
 
     this.password = await bcrypt.hash(this.password, 10);
     this.confirmPassword = undefined;
+});
+
+userSchema.pre(/^find/, function(next) {
+    this.find({isActive: {$ne: false}});
+    next();
 });
 
 userSchema.methods.checkPassword = async function(incomingPassword, userPassword) {

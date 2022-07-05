@@ -3,6 +3,17 @@ const ErrorHandler = require('../utils/errorHandler');
 const GlobalTryCatchAsync = require('../utils/globalTryCatchAsync');
 const GlobalQuerying = require('../utils/globalQuerying');
 
+//utils
+const filterObj = (obj, ...filters) => {
+    const result = {};
+    Object.keys(obj).forEach(el => {
+        if(filters.includes(el)) result[el] = obj[el];
+    });
+
+    return result;
+}
+//
+
 exports.getAllUsers = GlobalTryCatchAsync(
     async (req, res) => {
         const queryObj = await new GlobalQuerying(User.find(), req.query)
@@ -64,3 +75,37 @@ exports.deleteUser = GlobalTryCatchAsync(
         });
     }
 );
+
+/// Signed users
+
+exports.updateSignedUser = GlobalTryCatchAsync(
+    async (req, res, next) => {
+        if(req.body.password || req.body.confirmPassword){
+            return next(new ErrorHandler("You can't update password with this route.",400));
+        }
+
+        const userBody = filterObj(req.body,'firstName','lastName','email');
+        const user = await User.findByIdAndUpdate(req.user.id, userBody, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: user
+            }
+        });
+    }
+);
+
+exports.deleteSignedUser = GlobalTryCatchAsync(
+    async (req, res, next) => {
+        await User.findByIdAndUpdate(req.user.id,{isActive: false});
+
+        res.status(204).json({
+            status: 'success',
+            data: null
+        });
+    }
+)
