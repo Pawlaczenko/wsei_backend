@@ -11,6 +11,7 @@ process.on('uncaughtException', err => {
 
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 const ErrorHandler = require('./utils/errorHandler');
 const errorControler = require('./controllers/errorController');
@@ -18,6 +19,8 @@ const errorControler = require('./controllers/errorController');
 app.use(mongoSanitize());
 app.use(xss()); 
 app.use(hpp()); //parameter polution
+
+app.use(cookieParser());
 
 const userRouter = require('./routes/users');
 
@@ -38,7 +41,9 @@ app.all('*', (req,res,next)=> {
 
 app.use(errorControler);
 
-const server = app.listen(process.env.PORT || 3000);
+const server = app.listen(process.env.PORT || 3000, () => {
+    console.log(`Gateway listening at http://localhost:${process.env.PORT}`)
+});
 
 process.on('unhandledRejection', err => {
     console.log("____nhandled rejection____");

@@ -10,8 +10,12 @@
   "author": "Bartłomiej Pawlak",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
+    "express-http-proxy": "^1.6.3",
     "http-proxy-middleware": "^2.0.6",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.18"
   }
 }

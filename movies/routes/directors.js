@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const {protect} = require('../controllers/authController');
 
 const {
     getAllDirectors,
@@ -11,11 +12,11 @@ const {
 
 router.route('/')
     .get(getAllDirectors)
-    .post(createDirector);
+    .post(protect,createDirector);
 
 router.route('/:id')
     .get(getOneDirector)
-    .put(editDirector)
-    .delete(deleteDirector);
+    .put(protect,editDirector)
+    .delete(protect,deleteDirector);
 
 module.exports = router;

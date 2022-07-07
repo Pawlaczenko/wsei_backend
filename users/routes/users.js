@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
+//dla zalogowanego użytkownika
 router
     .route('/changePassword')
     .patch(authController.protect, authController.changePassword)
@@ -16,6 +17,7 @@ router
     .route('/deleteSignedUser')
     .delete(authController.protect, userController.deleteSignedUser);
 
+//auth //
 router
     .route('/register')
     .post(authController.register);
@@ -26,13 +28,18 @@ router
 
 router
     .route('/')
-    .get(userController.getAllUsers);
+    .get(authController.protect, authController.restrict('admin'), userController.getAllUsers);
 
 router
     .route('/:id')
-    .get(userController.getOneUser)
-    .put(userController.updateUser)
-    .delete(userController.deleteUser);
+    .get(authController.protect, authController.restrict('admin'),userController.getOneUser)
+    .put(authController.protect, authController.restrict('admin'),userController.updateUser)
+    .delete(authController.protect, authController.restrict('admin'),userController.deleteUser);
+
+//zewnętrzny route
+router
+    .route('/getUser/:token')
+    .get(authController.getUser);
 
 
 module.exports = router;

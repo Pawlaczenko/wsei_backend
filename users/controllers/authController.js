@@ -16,7 +16,6 @@ const createAndSendToken = (user, statusCode,res)=>{
     const cookieOptions = {
         expires: new Date(Date.now() + convertDaysToMiliseconds(30)),
         httpOnly: true
-
     };
     if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     res.cookie('token',token,cookieOptions);
@@ -48,7 +47,7 @@ exports.register = GlobalTryCatchAsync(
 
 exports.login = GlobalTryCatchAsync(
     async (req, res, next) => {
-        const {email, password} = req.body;
+        const {email, password,} = req.body;
 
         if(!email || !password){
             return next(new ErrorHandler("Email and Password are required to log in", 400));
@@ -97,6 +96,7 @@ exports.protect = GlobalTryCatchAsync(
 
 exports.restrict = (...roles) => {
     return (req,res,next) => {
+        // console.log(req.user);
         if(!roles.includes(req.user.role)){
             return next(new ErrorHandler('Permission denied.',403));
         }
@@ -118,3 +118,24 @@ exports.changePassword = GlobalTryCatchAsync(
         createAndSendToken(user,200,res);
     }
 )
+
+exports.getUser = GlobalTryCatchAsync(
+    async (req,res,next) => {
+        if (!req.params.token) return next(new AppError('You must be logged in', 401));
+
+        const token = req.params.token;
+        const tokenPromise = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        const currentUser = await User.findById(tokenPromise.id).select('+role');
+        if(!currentUser){
+            return next(new ErrorHandler("The user does not exists",401));
+        }
+        if(currentUser.isPasswordChanged(tokenPromise.iat)){
+            return next(new ErrorHandler("The password has been changed. Log in again.",401));
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: currentUser
+        });
+    }
+);

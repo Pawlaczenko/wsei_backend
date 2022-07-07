@@ -6,6 +6,7 @@ process.on('uncaughtException', err => {
     process.exit(1);
 });
 
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 
@@ -17,6 +18,7 @@ const actorRouter = require('./routes/actors');
 const genreRouter = require('./routes/genres');
 
 app.use(express.json());
+app.use(cookieParser());
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {
@@ -37,7 +39,9 @@ app.all('*', (req,res,next)=> {
 
 app.use(errorControler);
 
-const server = app.listen(process.env.PORT || 3000);
+const server = app.listen(process.env.PORT || 3000,() => {
+    console.log(`Gateway listening at http://localhost:${process.env.PORT}`)
+});
 
 process.on('unhandledRejection', err => {
     console.log("____nhandled rejection____");
