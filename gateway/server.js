@@ -3,7 +3,6 @@ const {setupProxies} = require("./proxy");
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const proxy = require('express-http-proxy');
 const morgan = require('morgan');
 
 const app = express()
@@ -24,10 +23,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/movies', proxy('127.0.0.1:3001'));
-app.use('/users', proxy('127.0.0.1:3002'));
-
-//setupProxies(app, ROUTES);
+setupProxies(app, ROUTES);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

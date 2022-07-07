@@ -27,6 +27,12 @@ router
     .post(authController.login);
 
 router
+    .route('/logout')
+    .get(authController.protect, authController.logout);
+
+
+//admin//
+router
     .route('/')
     .get(authController.protect, authController.restrict('admin'), userController.getAllUsers);
 

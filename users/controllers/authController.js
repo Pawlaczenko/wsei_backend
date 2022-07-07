@@ -63,15 +63,24 @@ exports.login = GlobalTryCatchAsync(
     }
 )
 
+exports.logout = GlobalTryCatchAsync(
+    async(req,res,next) => {
+        const cookieOptions = {
+            expires: new Date(Date.now() + convertDaysToMiliseconds(30)),
+            httpOnly: true
+        };
+        res.cookie('token','',cookieOptions);
+        res.status(200).json({
+            status: 'success',
+            message: "Succesfully logout."
+        });
+    }
+);
+
 exports.protect = GlobalTryCatchAsync(
     async (req, res, next) => {
 
-        let token;
-
-        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-            // Authorization: "Bearer token"
-            token = req.headers.authorization.split(' ')[1];
-        }
+        let token = req.cookies.token
 
         if(!token){
             return next(new ErrorHandler("Not logged in users don't have access to this data", 401));

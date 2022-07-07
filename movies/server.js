@@ -39,8 +39,8 @@ app.all('*', (req,res,next)=> {
 
 app.use(errorControler);
 
-const server = app.listen(process.env.PORT || 3000,() => {
-    console.log(`Gateway listening at http://localhost:${process.env.PORT}`)
+const server = app.listen(process.env.PORT || 3001,() => {
+    console.log(`Listening at http://localhost:${process.env.PORT}`)
 });
 
 process.on('unhandledRejection', err => {

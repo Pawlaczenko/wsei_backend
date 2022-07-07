@@ -48,10 +48,11 @@ const movieSchema = new mongoose.Schema({
 
 movieSchema.pre('find', function(next) {
     const fields = {...this._fields};
+    const areFieldsSet = (Object.keys(fields).length > 0) && (Object.keys(fields)[0] !== ('__v'));
     
-    if(fields.director) this.populate({path: 'director'});
-    if(fields.genre) this.populate({path:'genre'});
-    if(fields.actors) this.populate({path:'actors',select: 'firstName lastName'});
+    if(!areFieldsSet || fields.director) this.populate({path: 'director'});
+    if(!areFieldsSet || fields.genre) this.populate({path:'genre'});
+    if(!areFieldsSet || fields.actors) this.populate({path:'actors',select: 'firstName lastName'});
 
     next();
 });
