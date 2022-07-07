@@ -7,13 +7,21 @@ exports.protect = GlobalTryCatchAsync(
     async (req, res, next) => {
         if(!req.cookies.token) return next(new ErrorHandler("You must be logged in.",401));
         try {
-            const response = await axios.get( "http://127.0.0.1:3002/users/getUser/" +req.cookies.token);
-            req.user = response.user;
+            const response = await axios.get( `http://127.0.0.1:3002/users/getUser/${req.cookies.token}`);
+            req.user = response.data;
         } catch(error) {
-
            return next(new ErrorHandler(error.data.message,401));
         }
 
         next();
     }
 );
+
+exports.restrict = (...roles) => {
+    return (req,res,next) => {
+        if(!roles.includes(req.user.data.role)){
+            return next(new ErrorHandler('Permission denied.',403));
+        }
+        next();
+    }
+}

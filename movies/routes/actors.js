@@ -7,13 +7,13 @@ const {
     editActor,
     deleteActor
 } = require('../controllers/actorController');
-const {protect} = require('../controllers/authController');
+const {protect, restrict} = require('../controllers/authController');
 
-router.route('/').get(getAllActors).post(protect, createActor);
+router.route('/').get(getAllActors).post(protect,restrict('admin'), createActor);
 
 router.route('/:id')
     .get(getOneActor)
-    .put(protect,editActor)
-    .delete(protect,deleteActor);
+    .put(protect,restrict('admin'),editActor)
+    .delete(protect,restrict('admin'),deleteActor);
 
 module.exports = router;

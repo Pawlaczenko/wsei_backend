@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {protect} = require('../controllers/authController');
+const {protect, restrict} = require('../controllers/authController');
 
 const {
     getAllMovies,
@@ -12,11 +12,11 @@ const {
 
 router.route('/')
     .get(getAllMovies)
-    .post(protect,createMovie);
+    .post(protect,restrict('admin'),createMovie);
 
 router.route('/:id')
     .get(getOneMovie)
-    .put(protect,editMovie)
-    .delete(protect,deleteMovie);
+    .put(protect,restrict('admin'),editMovie)
+    .delete(protect,restrict('admin'),deleteMovie);
 
 module.exports = router;

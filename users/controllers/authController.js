@@ -53,7 +53,7 @@ exports.login = GlobalTryCatchAsync(
             return next(new ErrorHandler("Email and Password are required to log in", 400));
         }
 
-        const user = await User.findOne({email}).select('+password');
+        const user = await User.findOne({email}).select('+password +role');
 
         if(!user || !(await user.checkPassword(password, user.password))){
             return next(new ErrorHandler("Incorrect email or password", 401));

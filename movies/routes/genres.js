@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {protect} = require('../controllers/authController');
+const {protect, restrict} = require('../controllers/authController');
 
 const {
     getAllGenres,
@@ -10,11 +10,11 @@ const {
     deleteGenre
 } = require('../controllers/genreController');
 
-router.route('/').get(getAllGenres).post(protect,createGenre);
+router.route('/').get(getAllGenres).post(protect,restrict('admin'),createGenre);
 
 router.route('/:id')
     .get(getOneGenre)
-    .put(protect,editGenre)
-    .delete(protect,deleteGenre);
+    .put(protect,restrict('admin'),editGenre)
+    .delete(protect,restrict('admin'),deleteGenre);
 
 module.exports = router;
