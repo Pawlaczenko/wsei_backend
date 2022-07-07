@@ -10,6 +10,6 @@
 - [x] Użytkownicy REST API
 - [x] Mikroserwisy
 - [x] Stworzyć gateway
-- [ ] Autoryzacja i Autentykacja
-- [ ] Hosting
+- [x] Autoryzacja i Autentykacja
+- [x] Docker
 - [ ] Dokumentacja

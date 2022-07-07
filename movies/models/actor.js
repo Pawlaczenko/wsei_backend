@@ -20,10 +20,6 @@ const actorSchema = new mongoose.Schema({
     toObject: {virtuals: true} 
 });
 
-// actorSchema.virtual('movies').get(function(){
-//     return getMoviesByActor(this._id);
-// });
-
 actorSchema.index({firstName: 1, lastName: 1},{unique: true});
 
 module.exports = mongoose.model('Actor',actorSchema);

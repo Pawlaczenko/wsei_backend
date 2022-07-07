@@ -17,6 +17,6 @@ router.route('/')
 router.route('/:id')
     .get(getOneDirector)
     .put(protect,restrict('admin'),editDirector)
-    .delete(protect,deleteDirector);
+    .delete(protect,restrict('admin'),deleteDirector);
 
 module.exports = router;
