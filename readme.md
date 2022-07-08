@@ -1,3 +1,7 @@
+Instrukcje uruchomienia aplikacji znajdują się w pliku Opis Aplikacji.pdf
+
+
+TODO LIST:
 - [x] Przygotować bazę danych
 - [x] Podstawowe routy
 - [x] Wyszukiwanie, Filtrowanie, Sortowanie queries
@@ -12,4 +16,4 @@
 - [x] Stworzyć gateway
 - [x] Autoryzacja i Autentykacja
 - [x] Docker
-- [ ] Dokumentacja
+- [x] Dokumentacja
